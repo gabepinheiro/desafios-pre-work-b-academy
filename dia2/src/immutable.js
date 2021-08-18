@@ -13,5 +13,3 @@ const jane = {
 
 console.log('John:', john)
 console.log('Jane:', jane)
-
-console.log(john === jane)
