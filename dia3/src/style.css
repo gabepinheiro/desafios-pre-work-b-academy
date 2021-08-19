@@ -6,3 +6,33 @@
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.container-colors {
+  display: flex;
+  gap: 5px;
+}
+
+.box-color {
+  width: 100px;
+  height: 100px;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red
+}
+
+.black {
+  background-color: black;
+}
+
+.yellow {
+  background-color: yellow;
+}
