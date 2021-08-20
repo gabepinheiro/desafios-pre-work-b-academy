@@ -1,5 +1,8 @@
+import * as api from './api'
+
 const form = document.querySelector('[data-js="cars-form"]')
 const table = document.querySelector('[data-js="tbody-cars"]')
+const dialog = document.querySelector('[data-js="dialog"]')
 
 const getFormElement = e => elementName => {
   return e.target.elements[elementName]
@@ -39,11 +42,42 @@ function createColor(value){
   return td
 }
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit',  (e) =>  {
   e.preventDefault()
 
-  clearFields(e)
+  const getElement = getFormElement(e)
 
+  const car = {
+    image: getElement('image').value,
+    brandModel: getElement('brand-model').value,
+    year: getElement('year').value,
+    plate: getElement('plate').value,
+    color: getElement('color').value
+  }
+
+  api.POST(car)
+    .then(async (response) => {
+      if(response.ok) {
+        const result = await response.json()
+
+        dialog.className = `${dialog.className} sucess`
+        dialog.textContent = result.message
+
+        return api.GET().then((response) => response.ok && response.json())
+      }
+
+      const result = await response.json()
+      throw new Error(result.message)
+    })
+    .then((data) => {
+      table.innerHTML = ''
+      data.forEach(car => renderTable(car))
+      clearFields(e)
+    })
+    .catch(error => {
+      dialog.className = `${dialog.className} error`
+      dialog.textContent = error.message
+    })
 })
 
 const setAttribute = (attribute, value) => (element) => {
@@ -51,34 +85,32 @@ const setAttribute = (attribute, value) => (element) => {
    return element
 }
 
-export function renderTable(data){
-  if(data.length === 0) {
-    const tr = document.createElement('tr')
+export function renderOneTd(){
+  const tr = document.createElement('tr')
 
-    const tdWithColspan = setAttribute('colspan', 5)
-    tr.appendChild(tdWithColspan(createText("Nenhum carro encontrado.")))
+  const tdWithColspan = setAttribute('colspan', 5)
+  tr.appendChild(tdWithColspan(createText("Nenhum carro encontrado.")))
 
-    table.appendChild(tr)
+  table.appendChild(tr)
+}
 
-    return
-  }
-  // const getElement = getFormElement(e)
+export function renderTable(car){
 
-  // const elements = [
-  //   {type: 'image', value: getElement('image').value},
-  //   {type: 'text', value: getElement('brand-model').value},
-  //   {type: 'text', value: getElement('year').value},
-  //   {type: 'text', value: getElement('plate').value},
-  //   {type: 'color', value: getElement('color').value}
-  // ]
+  const elements = [
+    {type: 'image', value: car.image},
+    {type: 'text', value: car.brandModel},
+    {type: 'text', value: car.year},
+    {type: 'text', value: car.plate},
+    {type: 'color', value: car.color}
+  ]
 
-  // const tr = document.createElement('tr')
-  // // elements.forEach(element => {
-  // //   const td = elementTypes[element.type](element.value)
-  // //   tr.appendChild(td)
-  // // })
+  const tr = document.createElement('tr')
+  elements.forEach(element => {
+    const td = elementTypes[element.type](element.value)
+    tr.appendChild(td)
+  })
 
-  // table.appendChild(tr)
+  table.appendChild(tr)
 }
 
 function clearFields(e) {

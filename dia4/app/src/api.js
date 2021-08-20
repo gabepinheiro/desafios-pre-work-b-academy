@@ -5,3 +5,13 @@ export const GET = () => {
     method: 'GET'
   })
 }
+
+export const POST = (data) => {
+  return fetch(baseURL, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+}
