@@ -15,3 +15,13 @@ export const POST = (data) => {
     body: JSON.stringify(data)
   })
 }
+
+export const DELETE = (data) => {
+  return fetch(baseURL, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+}

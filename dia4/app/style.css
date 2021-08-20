@@ -13,9 +13,9 @@ table {
 .cars {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 3rem;
 }
+
 
 label {
   display: block
@@ -33,6 +33,6 @@ label {
   color: red;
 }
 
-.sucess{
+.success{
   color: green;
 }

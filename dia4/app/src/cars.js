@@ -8,10 +8,29 @@ const getFormElement = e => elementName => {
   return e.target.elements[elementName]
 }
 
+const setAttribute = (attribute, value) => (element) => {
+  element.setAttribute(attribute, value)
+  return element
+}
+
 const elementTypes = {
   image: createImage,
   text: createText,
-  color: createColor
+  color: createColor,
+  button: createButton
+}
+
+function createButton(value){
+  const td = document.createElement('td')
+  const btn = document.createElement('button')
+
+  btn.addEventListener('click', deleteCar)
+
+  btn.textContent = 'Delete'
+  const btnWithAttributeValue = setAttribute('value', value)
+  td.appendChild(btnWithAttributeValue(btn))
+
+  return td
 }
 
 function createImage(value){
@@ -42,6 +61,38 @@ function createColor(value){
   return td
 }
 
+function deleteCar(e) {
+  const car = {
+    plate: e.currentTarget.value
+  }
+
+  api.DELETE(car)
+    .then(async (response) => {
+      if(response.ok) {
+        const result = await response.json()
+
+        dialog.className = 'dialog success'
+        dialog.textContent = result.message
+
+        return api.GET().then((response) => response.ok && response.json())
+      }
+
+      const result = await response.json()
+      throw new Error(result.message)
+    })
+    .then((data) => {
+      table.innerHTML = ''
+
+      data.length === 0
+         ? renderOneTd()
+         : data.forEach(car => renderTable(car))
+    })
+    .catch(error => {
+        dialog.className = 'dialog error'
+        dialog.textContent = result.message
+    })
+}
+
 form.addEventListener('submit',  (e) =>  {
   e.preventDefault()
 
@@ -60,7 +111,7 @@ form.addEventListener('submit',  (e) =>  {
       if(response.ok) {
         const result = await response.json()
 
-        dialog.className = `${dialog.className} sucess`
+        dialog.className = 'dialog success'
         dialog.textContent = result.message
 
         return api.GET().then((response) => response.ok && response.json())
@@ -75,15 +126,10 @@ form.addEventListener('submit',  (e) =>  {
       clearFields(e)
     })
     .catch(error => {
-      dialog.className = `${dialog.className} error`
+      dialog.className = 'dialog error'
       dialog.textContent = error.message
     })
 })
-
-const setAttribute = (attribute, value) => (element) => {
-   element.setAttribute(attribute, value)
-   return element
-}
 
 export function renderOneTd(){
   const tr = document.createElement('tr')
@@ -101,7 +147,8 @@ export function renderTable(car){
     {type: 'text', value: car.brandModel},
     {type: 'text', value: car.year},
     {type: 'text', value: car.plate},
-    {type: 'color', value: car.color}
+    {type: 'color', value: car.color},
+    {type: 'button', value: car.plate}
   ]
 
   const tr = document.createElement('tr')
