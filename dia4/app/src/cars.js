@@ -8,7 +8,7 @@ const getFormElement = e => elementName => {
   return e.target.elements[elementName]
 }
 
-const setAttribute = (attribute, value) => (element) => {
+const createAttribute = (attribute, value) => (element) => {
   element.setAttribute(attribute, value)
   return element
 }
@@ -27,7 +27,7 @@ function createButton(value){
   btn.addEventListener('click', deleteCar)
 
   btn.textContent = 'Delete'
-  const btnWithAttributeValue = setAttribute('value', value)
+  const btnWithAttributeValue = createAttribute('value', value)
   td.appendChild(btnWithAttributeValue(btn))
 
   return td
@@ -134,7 +134,7 @@ form.addEventListener('submit',  (e) =>  {
 export function renderOneLine(){
   const tr = document.createElement('tr')
 
-  const tdWithColspan = setAttribute('colspan', 6)
+  const tdWithColspan = createAttribute('colspan', 6)
   tr.appendChild(tdWithColspan(createText("Nenhum carro encontrado.")))
 
   table.appendChild(tr)
