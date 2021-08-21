@@ -84,12 +84,12 @@ function deleteCar(e) {
       table.innerHTML = ''
 
       data.length === 0
-         ? renderOneTd()
+         ? renderOneLine()
          : data.forEach(car => renderTable(car))
     })
     .catch(error => {
         dialog.className = 'dialog error'
-        dialog.textContent = result.message
+        dialog.textContent = error.message
     })
 }
 
@@ -131,10 +131,10 @@ form.addEventListener('submit',  (e) =>  {
     })
 })
 
-export function renderOneTd(){
+export function renderOneLine(){
   const tr = document.createElement('tr')
 
-  const tdWithColspan = setAttribute('colspan', 5)
+  const tdWithColspan = setAttribute('colspan', 6)
   tr.appendChild(tdWithColspan(createText("Nenhum carro encontrado.")))
 
   table.appendChild(tr)

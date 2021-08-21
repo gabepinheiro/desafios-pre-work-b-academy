@@ -2,7 +2,7 @@ import './style.css'
 
 import * as api from './src/api'
 
-import { renderOneTd, renderTable } from './src/cars'
+import { renderOneLine, renderTable } from './src/cars'
 
 function load(){
   api.GET()
@@ -10,7 +10,7 @@ function load(){
     .then((data) => {
       console.log(data)
       if(data.length === 0) {
-        renderOneTd()
+        renderOneLine()
         return
       }
       return data.forEach(car => renderTable(car))
