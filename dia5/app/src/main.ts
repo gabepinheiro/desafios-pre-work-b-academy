@@ -27,11 +27,16 @@ const elementTypes = {
   color: createColor,
 }
 
-function createImage (image: any) {
+type ImageCarProps = {
+  src: string,
+  alt: string
+}
+
+function createImage ({ src, alt }: ImageCarProps ) {
   const td = document.createElement('td')
   const img = document.createElement('img')
-  img.src = image.src
-  img.alt = image.alt
+  img.src = src
+  img.alt = alt
   img.width = 100
   td.appendChild(img)
   return td
@@ -86,7 +91,7 @@ form.addEventListener('submit', async (e) => {
 
 function createTableRow (data: Car) {
   const elements = [
-    { type: 'image', value: { src: data.image, alt: data.brandModel } },
+    { type: 'image', value: {src: data.image, alt: data.plate} },
     { type: 'text', value: data.brandModel },
     { type: 'text', value: data.year },
     { type: 'text', value: data.plate },
