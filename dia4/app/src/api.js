@@ -1,9 +1,9 @@
 const baseURL = 'http://localhost:3333/cars'
 
 export const GET = () => {
-  return fetch(baseURL, {
-    method: 'GET'
-  })
+  return fetch(baseURL)
+  .then(response => response.json())
+  .catch(e => ({error: true, message: e.message}))
 }
 
 export const POST = (data) => {
@@ -14,6 +14,8 @@ export const POST = (data) => {
     },
     body: JSON.stringify(data)
   })
+  .then(response => response.json())
+  .catch(e => ({error: true, message: e.message}))
 }
 
 export const DELETE = (data) => {
@@ -24,4 +26,6 @@ export const DELETE = (data) => {
     },
     body: JSON.stringify(data)
   })
+  .then(response => response.json())
+  .catch(e => ({error: true, message: e.message}))
 }

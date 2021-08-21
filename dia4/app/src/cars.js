@@ -61,39 +61,32 @@ function createColor(value){
   return td
 }
 
-function deleteCar(e) {
+async function deleteCar(e) {
   const car = {
     plate: e.currentTarget.value
   }
 
-  api.DELETE(car)
-    .then(async (response) => {
-      if(response.ok) {
-        const result = await response.json()
+  const result = await api.DELETE(car)
 
-        dialog.className = 'dialog success'
-        dialog.textContent = result.message
+  if(result.error) {
+    dialog.className = 'dialog error'
+    dialog.textContent = error.message
+    return
+  }
 
-        return api.GET().then((response) => response.ok && response.json())
-      }
+  dialog.className = 'dialog success'
+  dialog.textContent = result.message
 
-      const result = await response.json()
-      throw new Error(result.message)
-    })
-    .then((data) => {
-      table.innerHTML = ''
+  const resultNewCars = await api.GET()
 
-      data.length === 0
-         ? renderOneLine()
-         : data.forEach(car => renderTable(car))
-    })
-    .catch(error => {
-        dialog.className = 'dialog error'
-        dialog.textContent = error.message
-    })
+  table.innerHTML = ''
+
+  resultNewCars.length === 0
+      ? renderOneLine()
+      : resultNewCars.forEach(car => renderTable(car))
 }
 
-form.addEventListener('submit',  (e) =>  {
+form.addEventListener('submit',  async (e) =>  {
   e.preventDefault()
 
   const getElement = getFormElement(e)
@@ -106,29 +99,23 @@ form.addEventListener('submit',  (e) =>  {
     color: getElement('color').value
   }
 
-  api.POST(car)
-    .then(async (response) => {
-      if(response.ok) {
-        const result = await response.json()
+  const result = await api.POST(car)
 
-        dialog.className = 'dialog success'
-        dialog.textContent = result.message
+  if(result.error) {
+    dialog.className = 'dialog error'
+    dialog.textContent = result.message
+    return
+  }
 
-        return api.GET().then((response) => response.ok && response.json())
-      }
+  dialog.className = 'dialog success'
+  dialog.textContent = result.message
 
-      const result = await response.json()
-      throw new Error(result.message)
-    })
-    .then((data) => {
-      table.innerHTML = ''
-      data.forEach(car => renderTable(car))
-      clearFields(e)
-    })
-    .catch(error => {
-      dialog.className = 'dialog error'
-      dialog.textContent = error.message
-    })
+  const resultNewCars = await api.GET()
+
+  table.innerHTML = ''
+  resultNewCars.forEach(car => renderTable(car))
+
+  clearFields(e)
 })
 
 export function renderOneLine(){
