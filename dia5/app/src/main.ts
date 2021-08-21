@@ -5,8 +5,10 @@ const url = 'http://localhost:3333/cars'
 const form = document.querySelector<HTMLFormElement>('[data-js="cars-form"]')!
 const table = document.querySelector<HTMLTableSectionElement>('[data-js="table"]')!
 
-const getFormElement = (event: { target: HTMLFormElement }) => (elementName: any) => {
-    return event.target.elements[elementName] as HTMLInputElement
+const getFormElement = (event: Event) => (elementName: string) => {
+    const eventTarget = event.target as HTMLFormElement
+
+    return eventTarget.elements.namedItem(elementName) as HTMLInputElement
 }
 
 export type Car =  {
@@ -60,7 +62,7 @@ function createColor (value: string) {
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault()
-  const getElement= getFormElement({ target: e.target as HTMLFormElement})
+  const getElement= getFormElement(e)
 
   const data = {
     image: getElement('image').value,
