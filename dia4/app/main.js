@@ -4,8 +4,6 @@ import * as api from './src/api'
 
 import { renderOneTd, renderTable } from './src/cars'
 
-window.addEventListener('load', () => load())
-
 function load(){
   api.GET()
     .then((response) => response.ok && response.json())
@@ -19,3 +17,5 @@ function load(){
     })
     .catch((error) => alert(error.message))
 }
+
+load()
